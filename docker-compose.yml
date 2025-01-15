@@ -1,0 +1,31 @@
+﻿version: '3.8'
+
+name: simple_bus
+
+services:
+  http_bus:
+    build:
+      context: ./HttpBus
+      dockerfile: Dockerfile
+    networks:
+      my_network:
+        ipv4_address: 172.20.5.2
+    ports:
+      - "5554:5554"
+
+  test_server:
+    build:
+      context: ./TestServer
+      dockerfile: Dockerfile
+    networks:
+      my_network:
+        ipv4_address: 172.20.5.3
+    ports:
+      - "5555:5555"
+  
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.5.0/24

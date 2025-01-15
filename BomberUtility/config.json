@@ -1,0 +1,5 @@
+﻿{
+	"BaseURL": "http://localhost:5554",
+	"RequestCount": 100,
+	"ParallelThread" : 5
+}
