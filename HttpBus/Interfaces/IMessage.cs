@@ -8,5 +8,6 @@ public interface IMessage
     Task RepublishByTopicAsync(string topic);
     Task<IEnumerable<Publication>> GetAllPublicationsAsync();
     Task<IEnumerable<Message>> GetMessagesByTopicAsync(string topic);
+    Task<StatisticDTO> GetStatisticsAsync();
 }
 

@@ -68,4 +68,17 @@ public class MessagesController : ControllerBase
             _.Url
         }));
     }
+
+    /// <summary>
+    /// Выводит статистику.
+    /// </summary>
+    [HttpGet("statistics")]
+    public async Task<IActionResult> GetStatistics()
+    {
+        var statistic = await _messageService.GetStatisticsAsync();
+        return Ok(
+            $"Публикаций {statistic.Publish};\n\r" +
+            $"Доставлено: {statistic.Delivered};\n\r" +
+            $"Не доставлено: {statistic.NotDelivered}");
+    }
 }

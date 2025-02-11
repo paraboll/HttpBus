@@ -64,6 +64,31 @@ public class MessageService : IMessage
             .ToListAsync();
     }
 
+    public async Task<StatisticDTO> GetStatisticsAsync()
+    {
+        using var context = await _dbFactory.CreateDbContextAsync();
+
+        var publishCount = await context.Publications.CountAsync();
+        var messagesStats = await context.Messages
+            .GroupBy(_ => _.IsDelivered)
+            .Select(g => new
+            {
+                IsDelivered = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        var deliveredCount = messagesStats.FirstOrDefault(_ => _.IsDelivered)?.Count ?? 0;
+        var notDeliveredCount = messagesStats.FirstOrDefault(_ => !_.IsDelivered)?.Count ?? 0;
+
+        return new StatisticDTO
+        {
+            Publish = publishCount,
+            Delivered = deliveredCount,
+            NotDelivered = notDeliveredCount
+        };
+    }
+
     #region PrivateMethods
 
     private async Task ProcessPublicationAsync()
