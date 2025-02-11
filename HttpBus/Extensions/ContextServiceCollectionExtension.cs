@@ -16,6 +16,9 @@ public static class ContextServiceCollectionExtension
         services.AddSingleton<IMessage, MessageService>();
         services.AddScoped<ISubscription, SubscriptionService>();
 
+        if (dbSettings.Provider == DbProviders.InMemory)
+            InitializeSubscriptionsAsync(services).GetAwaiter().GetResult();
+        
         return services;
     }
 
@@ -33,7 +36,6 @@ public static class ContextServiceCollectionExtension
                     break;
                 case DbProviders.InMemory:
                     options.UseInMemoryDatabase("DataBus");
-                    InitializeSubscriptionsAsync(services).GetAwaiter().GetResult();
                     break;
                 default:
                     throw new Exception($"Провайдер {dbSettings.Provider} не определён.");
